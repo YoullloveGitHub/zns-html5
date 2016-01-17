@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>css3 mask</title>
+<style>
+*{margin: 0; padding: 0;}
+.box { width: 600px; margin: 0 auto;}
+.mask { 
+	-webkit-mask: url(images/mask.png); /*蒙版*/
+	-webkit-mask-position: -300px 0; 	/*定位*/
+}
+/*-----------------------------------------------*/
+.mask-bg { 
+	width: 600px; 
+	height: 337px; 
+	background: url(images/mask.jpg) no-repeat;
+	position: relative;
+	top: 0;
+	left: 0;
+}
+.mask-bg span {
+	position: absolute;
+	top:340px;
+	left: 0;
+	width: 600px;
+	height: 337px; 
+	background: url(images/mask.jpg) no-repeat;
+	transform: scale(1,-1);
+	-webkit-mask: -webkit-linear-gradient(rgba(0,0,0,0) 50%,rgba(0,0,0,1));
+	opacity:  .6;
+}
+.text-shadow {
+	 width: 150px;
+	 height: 20px;
+	 font-size: 20px;
+	 margin: 0 auto;
+	 text-align: center;
+	 margin-bottom: 30px;
+	 color: red;
+	 font-weight: bold;
+}
+.sun { 
+	width: 100px; 
+	height: 100px; 
+	background: #F60; 
+	box-shadow: 0 0 20px #ff9;
+	border-radius: 50%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.box-shadow {
+	width: 600px;
+	height: 100px;
+	background: #ccc;
+	margin-bottom: 50px;
+	box-shadow: 5px 5px 0px 0px red, 10px 10px 0px 0px #000, 15px 15px 0px 0px blue, 20px 20px 0px 0px pink; /*设置多个阴影*/
+}
+。
+.radius-linear { 
+	width: 600px; 
+	height: 100px; 
+	border-radius: 3px;  
+	margin-bottom: 50px;
+	background: -webkit-linear-gradient( 45deg,#fff, red, yellow, green, gold,#fff);
+	box-shadow: 0px 5px 0px 0px red, 5px 0px 0px 0px #000, -5px 0px 0px 0px blue, 0px -5px 0px 0px pink; /*设置多个阴影*/
+}
+.radius-radial { 
+	width: 300px; 
+	height: 300px; 
+	margin: 0 auto;
+	border-radius: 50%;  
+	margin-bottom: 50px;
+	background: -webkit-radial-gradient(100px 150px,  green, red, gold,  yellow);
+	box-shadow: 0px 5px 0px 0px red, 5px 0px 0px 0px #000, -5px 0px 0px 0px blue, 0px -5px 0px 0px pink; /*设置多个阴影*/
+}
+.text-shadow2 {
+	text-align: center;
+	font-size: 50px; 
+	height: 100px;
+	line-height: 100px;
+	color:rgba(0,0,0,0);
+	text-shadow: 0 0 10px #000;
+}
+.clip {
+	height: 100px;
+	line-height: 100px;
+	font-size: 50px;
+	background: -webkit-radial-gradient( red, green, gold, pink, orange);
+	-webkit-background-clip:text;
+	font-weight: 700;
+	text-align: center;
+	color: rgba(0,0,0,0); /*透明效果好！！！！！*/
+}
+.box-btn{
+	font-size: 50px;
+	width: 300px;
+	height: 100px;
+	line-height: 100px;
+	font-weight: bold;
+	margin: 0 auto;
+	margin-bottom: 30px;
+	text-align: center;
+	color:#fff;
+	background: -webkit-linear-gradient(red, #f66);
+	text-shadow: 0 0 10px #000;
+	border-radius:  10px;
+	box-shadow:inset 0 0 10px gold, 0px 10px 2px #000,0 -1px 2px #000;
+	position: relative;
+	top: 0;
+	border: 1px solid #fff;
+}
+.box-btn:hover{
+	cursor: pointer;
+}
+.box-btn:active {
+	top: 10px;
+	box-shadow: inset 0 0 20px gold, 0 0 2px #000;
+}
+.filter { 
+	position: absolute; 
+	top: 50%; 
+	left: 50%; 
+	box-shadow: 0 0 20px 5px #000;
+	margin-left: -300px; 
+	margin-top: -180px;
+	
+	display: none;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+	//文字阴影
+	var oTextShadow = document.querySelector('.text-shadow');
+	var oSun = document.querySelector('.sun');
+	document.addEventListener('mousemove',function(ev){
+		var x1 = ev.pageX;
+		var y1 = ev.pageY;
+		oSun.style.top = y1-oSun.offsetHeight/2 +'px';
+		oSun.style.left = x1-oSun.offsetWidth/2 +'px';
+		var x2 = oTextShadow.offsetLeft+oTextShadow.offsetWidth/2;
+		var y2 = oTextShadow.offsetTop+oTextShadow.offsetHeight/2;
+		var disX = (x2-x1)/3;
+		var disY = (y2-y1)/3;
+		var dis = Math.sqrt(disX*disX+disY*disY)/20;
+		oTextShadow.style.textShadow = disX+'px '+disY+'px '+dis+'px #000';
+	},false);
+
+	//背景虚化
+	var filter = document.querySelector('.filter');
+	var box = document.querySelector('.box');
+	var timer = setTimeout(function(){
+		filter.style.display = 'block';
+		box.style.WebkitFilter = 'blur(3px)';
+		box.style.filter = 'blur(3px)';
+		clearTimeout(timer);
+	},3000)
+
+	var timer2 = setTimeout(function(){
+		filter.style.display = 'none';
+		box.style.WebkitFilter = '';
+		box.style.filter = '';
+		clearTimeout(timer2);
+	},6000)
+
+	filter.onclick=function(){
+		filter.style.display = 'none';
+		box.style.WebkitFilter = '';
+		box.style.filter = '';
+	}
+},false)
+</script>
+</head>
+
+<body>
+<div class="box">
+	<div class="mask">
+		<img src="images/mask.jpg" />
+	</div>
+	<div class="text-shadow">
+		<div class="sun" id="sun"></div>
+		这是一段文字
+	</div>
+	<div class="text-shadow2">
+		这是一段虚化文字
+	</div>
+	<div class="clip">
+		这是一段文字蒙板
+	</div>
+	<div class="box-btn">按钮</div>
+	<div class="box-shadow"></div>
+	<div class="radius-linear"></div>
+	<div class="radius-radial"></div>
+	<div class="mask-bg">
+		<span></span>
+	</div>
+</div>
+<div class="filter">
+	<img src="images/mask.jpg">
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
